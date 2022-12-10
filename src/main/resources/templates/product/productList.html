@@ -2,42 +2,25 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Главная страница</title>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/index.css}">
+    <title>Список товаров</title>
 </head>
 <body>
 
-<h3>Главная страница магазина</h3>
-
-    <form method="post" th:action="@{/logout}">
-        <input type="submit" value="Выйти из личного кабинета">
-    </form>
-
-    <br><br>
-    <form method="get" th:action="@{/cart}">
-        <input type="submit" value="Корзина">
-    </form>
-
-    <form method="get" th:action="@{/orders}">
-        <input type="submit" value="История заказов">
-    </form>
-
-    <br><br>
     <form th:method="POST" th:action="@{/product/search}">
         <fieldset>
             <legend>Выберите параметр для сортировка: </legend>
 
-            <br>
+            <br><br>
             <label for="search">Поиск по наименованию</label>
-            <input name="search" id="search">
+            <input name="search" id="search" th:value="*{value_search}">
 
-            <br>
+            <br><br>
             <p>Цена, ₽</p>
             <label for="ot">От</label>
-            <input type="text" name="ot" id="ot">
-            <br>
+            <input type="text" name="ot" id="ot" th:value="*{value_price_ot}">
+
             <label for="do">До</label>
-            <input type="text" name="do" id="do">
+            <input type="text" name="do" id="do" th:value="*{value_price_do}">
 
             <br><br>
             <div>
@@ -48,8 +31,8 @@
                 <label for="descending_price">Отсортировать по убыванию цены</label>
                 <input type="radio" id="descending_price" name="price" value="sorted_by_descending_price">
 
-                <br><br>
                 <p>Категория товаров: </p>
+
                 <label for="furniture">Мебель</label>
                 <input type="radio" id="furniture" name="contact" value="furniture">
 
@@ -66,15 +49,27 @@
         <br>
     </form>
 
+    <h3>Результат</h3>
+
+    <div th:each="product : ${search_product}">
+        <img th:src="'/img/' + ${product.imageList[0].getFileName()}" width="300px">
+        <br>
+        <a th:href="@{/product/info/{id}(id=${product.getId()})}" th:text="${product.getTitle()}"></a>
+        <p th:text="'Цена: ' + ${product.getPrice()}"></p>
+        <hr>
+    </div>
+
+    <hr>
     <h3>Доступные товары: </h3>
+    <hr>
 
     <div th:each="product : ${products}">
         <img th:src="'/img/' + ${product.imageList[0].getFileName()}" width="300px">
         <br>
         <a th:href="@{/product/info/{id}(id=${product.getId()})}" th:text="${product.getTitle()}"></a>
         <p th:text="'Цена: ' + ${product.getPrice()}"></p>
-        <a th:href="@{/cart/add/{id}(id=${product.getId()})}">Добавить в корзину</a>
         <hr>
     </div>
+
 </body>
 </html>

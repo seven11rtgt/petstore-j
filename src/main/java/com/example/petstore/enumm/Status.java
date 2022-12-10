@@ -1,4 +1,10 @@
 package com.example.petstore.enumm;
 
-public class Status {
+public enum Status {
+  Принят,
+  Оформлен,
+  Оплачен,
+  В_пути,
+  Ожидает,
+  Получен
 }
