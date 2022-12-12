@@ -2,12 +2,31 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Список товаров</title>
+    <title>Личный кабинет пользователя</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/index.css}">
 </head>
 <body>
+
+    <h3>Личный кабинет пользователя</h3>
+
+    <form method="post" th:action="@{/logout}">
+        <input type="submit" value="Выйти из личного кабинета">
+    </form>
+
+    <br><br>
+    <form method="get" th:action="@{/cart}">
+        <input type="submit" value="Корзина">
+    </form>
+
+    <br><br>
+    <form method="get" th:action="@{/orders}">
+        <input type="submit" value="История заказов">
+    </form>
+
+    <br><br>
     <form th:method="POST" th:action="@{/product/search}">
         <fieldset>
-            <legend>Фильтры и сортировка:</legend>
+            <legend>Выберите параметр для сортировки: </legend>
 
             <br><br>
             <label for="search">Поиск по наименованию</label>
@@ -52,7 +71,10 @@
         <h3>Вот, что мы нашли по вашему запросу:</h3>
 
         <div th:each="product : ${found_product}">
-            <img th:src="'/img/' + ${product.getImageList()[0].getFileName()}" width="300px">
+            <div th:unless="${#lists.isEmpty(found_product)}">
+                <img th:src="'/img/' + ${product.getImageList()[0].getFileName()}" width="300px">
+            </div>
+
             <br>
             <a th:href="@{/product/info/{id}(id=${product.getId()})}" th:text="${product.getTitle()}"></a>
             <p th:text="'Цена: ' + ${product.getPrice()}"></p>
@@ -63,12 +85,14 @@
     <h3>Товары в наличии: </h3>
 
     <div th:each="product : ${products}">
-        <img th:src="'/img/' + ${product.imageList[0].getFileName()}" width="300px">
-        <br>
+        <div th:unless="${#lists.isEmpty(product.getImageList())}">
+            <img th:src="'/img/' + ${product.getImageList()[0].getFileName()}" width="300px">
+        </div>
+
         <a th:href="@{/product/info/{id}(id=${product.getId()})}" th:text="${product.getTitle()}"></a>
         <p th:text="'Цена: ' + ${product.getPrice()}"></p>
+        <a th:href="@{/cart/add/{id}(id=${product.getId()})}">Добавить в корзину</a>
         <hr>
     </div>
-
 </body>
 </html>

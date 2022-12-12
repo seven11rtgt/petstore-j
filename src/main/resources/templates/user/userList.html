@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Список всех пользователей</title>
+</head>
+<body>
+  <h3>Зарегистрированные пользователи:</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th> ID </th>
+        <th> Логин </th>
+        <th> Роль </th>
+        <th> </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr th:each="user : ${userList}">
+        <td><span th:text="${user.getId()}"> </span></td>
+        <td><span th:text="${user.getLogin()}"> </span></td>
+        <td><span th:text="${user.getRole().equals('ROLE_ADMIN') ? 'ADMIN' : 'USER'}"> </span></td>
+        <td>
+          <div th:unless="${user.getLogin().equals('admin')}">
+            <a th:href="@{/admin/role/edit/{id}(id=${user.getStringId()})}"
+            ><button>Сменить роль</button></a>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <br>
+  <a href='/admin'>
+    <button>Вернуться в личный кабинет администратора</button>
+  </a>
+
+</body>
+</html>
