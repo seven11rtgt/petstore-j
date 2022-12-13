@@ -2,6 +2,7 @@ package com.example.PetstoreApplication.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
+import org.hibernate.validator.constraints.Length;
 
 import java.time.LocalDateTime;
 
@@ -13,6 +14,8 @@ public class Order {
   private Long id;
 
   @Column(name = "order_number")
+  @Length(min = 4, max=10, message = "Номер заказа должен быть от 4 до 10 " +
+          "символов")
   private String orderNumber;
 
   @Min(value = 0, message = "Количество товара не может быть отрицательным")
@@ -20,16 +23,18 @@ public class Order {
 
   private float price;
 
-  @Column(name = "date_time")
+  @Column(name = "order_date")
   private LocalDateTime dateTime;
 
   @ManyToOne(optional = false)
   private Product product;
 
+  @Column(name = "customer_id")
   @ManyToOne(optional = false)
   private Person person;
 
-  // private Status status;
+
+  private String status;
 
   public Order() {
   }
@@ -40,7 +45,7 @@ public class Order {
     this.person = person;
     this.quantity = quantity;
     this.price = price;
-    //this.status = status;
+    this.status = status;
   }
 
 

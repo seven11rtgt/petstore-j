@@ -2,10 +2,20 @@ body{
     padding: 25px 15px!important;
 }
 
-
 a.btn {
     margin-bottom: 15px;
 }
 h3{
     margin: 30px 0;
+}
+
+.card{
+    height: 18rem;
+}
+
+.card-img, .card-img-bottom, .card-img-top{
+    height: 80%;
+    object-fit: contain;
+    padding: 10px;
+    box-sizing: border-box;
 }
