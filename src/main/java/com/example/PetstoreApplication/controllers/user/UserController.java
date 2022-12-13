@@ -113,9 +113,9 @@ public class UserController {
       productsList.add(productService.getProductId(cart.getProductId()));
     }
 
-    float sum = 0;
+    float totalSum = 0;
     for (Product product: productsList){
-      sum += product.getPrice();
+      totalSum += product.getPrice();
     }
 
     String uuid = UUID.randomUUID().toString();
@@ -137,6 +137,6 @@ public class UserController {
             orderRepository.findByPersonId(personDetails.person().getId());
 
     model.addAttribute("orders", orderList);
-    return "user/orderList";
+    return "order/orderList";
   }
 }

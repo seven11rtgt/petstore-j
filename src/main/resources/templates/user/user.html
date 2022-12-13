@@ -71,10 +71,7 @@
         <h3>Вот, что мы нашли по вашему запросу:</h3>
 
         <div th:each="product : ${found_product}">
-            <div th:unless="${#lists.isEmpty(found_product)}">
-                <img th:src="'/img/' + ${product.getImageList()[0].getFileName()}" width="300px">
-            </div>
-
+            <img th:src="'/img/' + ${product.getImageList()[0].getFileName()}" width="300px">
             <br>
             <a th:href="@{/product/info/{id}(id=${product.getId()})}" th:text="${product.getTitle()}"></a>
             <p th:text="'Цена: ' + ${product.getPrice()}"></p>

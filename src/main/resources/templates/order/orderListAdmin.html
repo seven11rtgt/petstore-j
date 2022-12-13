@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Управление заказами</title>
+</head>
+<body>
+  <h3>Управление заказами</h3>
+
+  <div class="ordersTable">
+    <table>
+      <thead>
+      <th>Номер</th>
+      <th>Дата</th>
+      <th>Количество</th>
+      <th>Цена</th>
+      <th>Товар</th>
+      <th>Клиент (логин)</th>
+      <th></th>
+      </thead>
+
+      <div th:unless="${#lists.isEmpty(orders)}">
+        <div th:each="order : ${orders}">
+          <tr>
+            <td th:text="${order.getOrderNumber()}"></td>
+            <td th:text="${order.getDateTime()}"></td>
+            <td th:text="${order.getPrice()}"></td>
+            <td th:text="${order.getQuantity()}"></td>
+            <td th:text="${order.getPrice()}"></td>
+            <td th:text="${order.getProduct().getTitle()}"></td>
+            <td th:text="${order.getPerson().getLogin()}"></td>
+            <td></td>
+            <td>
+              <form th:method="POST" th:action="@{/admin/order/edit/{id}(id=${order.getId()})}"
+                    th:object="${order}">
+                <select class="form-control" id="dropDownList">
+                  <option value="0">select option</option>
+                  <option th:each="option : ${options}" th:value="${option}" th:text="${option}"></option>
+                </select>
+              </form>
+
+              <a th:href="@{/admin/product/edit/{id}(id=${product.getId()})}">
+                <button>Изменить статус заказа</button>
+              </a>
+              <br>
+            </td>
+          </tr>
+        </div>
+      </div>
+
+    </table>
+  </div>
+
+  <br>
+  <a th:href="@{/admin}">
+    <button>Вернуться назад</button>
+  </a>
+</body>
+</html>

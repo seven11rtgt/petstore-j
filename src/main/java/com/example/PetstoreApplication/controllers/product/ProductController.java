@@ -1,8 +1,9 @@
-package com.example.PetstoreApplication.controllers;
+package com.example.PetstoreApplication.controllers.product;
 
 import com.example.PetstoreApplication.repositories.ProductRepository;
 import com.example.PetstoreApplication.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -27,9 +28,12 @@ public class ProductController {
   }
 
   @GetMapping("/info/{id}")
-  public String productInfo(@PathVariable("id") Long id, Model model)
+  public String productInfo(@PathVariable("id") Long id,
+                            Model model,
+                            @RequestHeader(value = HttpHeaders.REFERER, required = false) final String referrer)
   {
     model.addAttribute("product", productService.getProductId(id));
+    model.addAttribute("previousUrl", referrer);
     return "product/infoProduct";
   }
 

@@ -56,7 +56,8 @@ public class SecurityConfig
             // Указыаем что данные страницы доступна все пользователям
             .requestMatchers("/authentication/login",
                     "/authentication/registration","/error", "/index",
-                    "/product/**", "/resources/static/**", "/img/**").permitAll()
+                    "/product/**", "/product/info/**", "/resources/static/**",
+                    "/img/**").permitAll()
              //   .requestMatchers("/resources/static/**", "/img/**")
                 //   .permitAll()
             // Указываем что все остальные страницы доступны пользователям с ролью user и admin

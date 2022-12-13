@@ -1,0 +1,44 @@
+table{
+    display: block;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+.contentLayout{
+    margin-top: 30px;
+}
+.carouselLayout{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.container{
+    margin-left: unset;
+    padding-left: unset;
+}
+.carouselInner{
+    width: 50vw;
+    height: 50vh;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid lightgrey;
+}
+
+.carousel{
+    width:100%;
+}
+.carousel-item{
+    justify-content: center;
+    width: max-content;
+    transition: unset;
+}
+.carousel-item.active{
+    z-index: 1;
+    display: flex;
+}
+.carousel img {
+    object-fit: contain;
+    width: 100%;
+    height: 300px;
+    background-color: white;
+}

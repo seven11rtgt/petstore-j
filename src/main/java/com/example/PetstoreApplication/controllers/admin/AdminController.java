@@ -3,11 +3,13 @@ package com.example.PetstoreApplication.controllers.admin;
 import com.example.PetstoreApplication.models.Image;
 import com.example.PetstoreApplication.models.Product;
 import com.example.PetstoreApplication.repositories.CategoryRepository;
+import com.example.PetstoreApplication.services.OrderService;
 import com.example.PetstoreApplication.services.PersonService;
 import com.example.PetstoreApplication.services.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -30,14 +32,17 @@ public class AdminController {
   private final ProductService productService;
   private final CategoryRepository categoryRepository;
   private final PersonService personService;
+  private final OrderService orderService;
 
   @Autowired
   public AdminController(ProductService productService,
                          CategoryRepository categoryRepository,
-                         PersonService personService) {
+                         PersonService personService,
+                         OrderService orderService) {
     this.productService = productService;
     this.categoryRepository = categoryRepository;
     this.personService = personService;
+    this.orderService = orderService;
   }
 
   @GetMapping("")
@@ -74,10 +79,12 @@ public class AdminController {
   }
 
   @GetMapping("/products")
-  public String getAllProducts(Model model)
+  public String getAllProductsAdmin(Model model,
+                                    @RequestHeader(value = HttpHeaders.REFERER, required = false) final String referrer)
   {
     model.addAttribute("products", productService.getAllProduct());
-    return "/product/productList";
+    model.addAttribute("previousUrl", referrer);
+    return "/product/productListAdmin";
   }
 
   // http:/localhost:8080/admin/product/add
@@ -94,38 +101,24 @@ public class AdminController {
   public String addProduct(
     @ModelAttribute("product") @Valid Product product,
     BindingResult bindingResult,
-    @RequestParam("file_one") MultipartFile file_one,
-    @RequestParam("file_two") MultipartFile file_two,
-    @RequestParam("file_three") MultipartFile file_three,
-    @RequestParam("file_four") MultipartFile file_four,
-    @RequestParam("file_five") MultipartFile file_five)
+    @RequestParam("files") MultipartFile[] files)
           throws IOException {
 
       if(bindingResult.hasErrors()) return "product/addProduct";
 
-      List<MultipartFile> productImages = new ArrayList<>();
-      if(file_one != null) productImages.add(file_one);
-      if(file_two != null) productImages.add(file_two);
-      if(file_three != null) productImages.add(file_three);
-      if(file_four != null) productImages.add(file_four);
-      if(file_five != null) productImages.add(file_five);
-
-      System.out.println("productImagesLength: " + productImages.size());
-
-      for (MultipartFile file: productImages)
+      for (MultipartFile file: files)
       {
-        if(file == null) continue;
-
         File uploadDir = new File(uploadPath);
         if(!uploadDir.exists()){ uploadDir.mkdir(); }
 
-        String uuidFile = UUID.randomUUID().toString();
-        String resultFileName = uuidFile + "." + file.getOriginalFilename();
+        String uuidFileName = UUID.randomUUID().toString();
 
-        file.transferTo(new File(uploadPath + "/" + resultFileName));
+        File newFile = new File(uploadPath + "/" + uuidFileName);
+        file.transferTo(newFile);
         Image image = new Image();
+
+        image.setFileName(uuidFileName);
         image.setProduct(product);
-        image.setFileName(resultFileName);
         product.addImageToProduct(image);
       }
 
@@ -137,12 +130,13 @@ public class AdminController {
   @GetMapping("/product/delete/{id}")
   public String deleteProduct(@PathVariable("id") Long id){
     productService.deleteProduct(id);
-    return "redirect:/admin";
+    return "redirect:/admin/products";
   }
 
   // Отображаем страницу с возможностью редактирования товаров
   @GetMapping("/product/edit/{id}")
-  public String editProduct(Model model, @PathVariable("id") Long id){
+  public String editProduct(Model model,
+                            @PathVariable("id") Long id){
     model.addAttribute("product", productService.getProductId(id));
     model.addAttribute("category", categoryRepository.findAll());
     return "product/editProduct";
@@ -157,6 +151,21 @@ public class AdminController {
 
       if(bindingResult.hasErrors()) { return "product/editProduct"; }
       productService.updateProduct(id, product);
-      return "redirect:/admin";
+      return "redirect:/admin/products";
+  }
+
+  // Отображаем страницу с возможностью редактирования заказов
+  @GetMapping("/orders")
+  public String editProduct(Model model){
+    model.addAttribute("orders", orderService.getAllOrders());
+
+    List<String> options = new ArrayList<>();
+    options.add("Создан");
+    options.add("Обработан");
+    options.add("Отправлен");
+    options.add("Получен");
+    model.addAttribute("options", options);
+
+    return "order/orderListAdmin";
   }
 }

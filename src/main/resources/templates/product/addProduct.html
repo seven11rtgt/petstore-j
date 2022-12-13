@@ -18,6 +18,11 @@
         <div style="color: red" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></div>
         <br>
         <br>
+        <label for="description">Введите количество товара: </label>
+        <textarea th:field="*{quantity}" placeholder="Количество" id="quantity"></textarea>
+        <div style="color: red" th:if="${#fields.hasErrors('quantity')}" th:errors="*{quantity}"></div>
+        <br>
+        <br>
         <label for="price">Введите цену товара: </label>
         <input type="number" th:field="*{price}" min="1" step="0.00" id="price">
         <div style="color: red" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></div>
@@ -41,14 +46,10 @@
         </select>
 
         <br>
-        <p style="color: red">Вы можете добавить до 5 фотографий. Первая фотография не может быть пустой т.к она будет являться главной</p>
+        <p style="color: green">Вы можете добавить до 5 фотографий. Первая фотография не может быть
+            пустой, т.к она будет являться главной</p>
 
-        <input type="file" name="file_one">
-        <input type="file" name="file_two">
-        <input type="file" name="file_three">
-        <input type="file" name="file_four">
-        <input type="file" name="file_five">
-
+        <input type="file" name="files" multiple>
         <br>
         <input type="submit" value="Добавить">
     </form>

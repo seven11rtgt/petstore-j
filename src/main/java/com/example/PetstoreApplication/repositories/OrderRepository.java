@@ -10,4 +10,7 @@ import java.util.List;
 public interface OrderRepository extends JpaRepository<Order, Long> {
 
   List<Order> findByPersonId(Long id);
+
+  // Находим заказ по последним 4 знакам без учета регистра
+  // List<Product> findByOrderNumberRegex(String orderNumber);
 }

@@ -2,10 +2,10 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Редактирование товаров</title>
+    <title>Редактирование товара</title>
 </head>
 <body>
-    <h3>Редактирование товаров</h3>
+    <h3>Редактирование товара</h3>
 
     <form th:method="POST" th:action="@{/admin/product/edit/{id}(id=${product.getId()})}" th:object="${product}">
 
@@ -22,6 +22,11 @@
         <label for="price">Введите цену товара: </label>
         <input type="number" th:field="*{price}" min="1" step="0.00" id="price">
         <div style="color: red" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></div>
+
+        <br><br>
+        <label for="price">Введите количество товара: </label>
+        <input type="number" th:field="*{quantity}" min="1" step="0" id="quantity">
+        <div style="color: red" th:if="${#fields.hasErrors('quantity')}" th:errors="*{quantity}"></div>
 
         <br><br>
         <label for="warehouse">Введите склад: </label>

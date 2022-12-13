@@ -27,6 +27,9 @@ public class Product {
   @Min(value = 1, message = "Цена не может быть меньше 1 рубля")
   private float price;
 
+  @Min(value = 1, message = "Количество не может быть меньше 1")
+  private int quantity;
+
   //@Column(name = "warehouse", nullable = false)
   @NotEmpty(message = "Должен быть указан склад, где находится товар")
   private String warehouse;
@@ -88,6 +91,14 @@ public class Product {
 
   public void setDescription(String description) {
     this.description = description;
+  }
+
+  public int getQuantity() {
+    return quantity;
+  }
+
+  public void setQuantity(int quantity) {
+    this.quantity = quantity;
   }
 
   public float getPrice() {
