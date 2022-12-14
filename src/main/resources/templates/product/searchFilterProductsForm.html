@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+  <form th:method="POST" th:fragment="searchFilterProducts" th:action="@{/product/search}"
+        class="searchForm">
+    <fieldset>
+    <legend>Выберите параметр для сортировки: </legend>
+
+    <label for="search" class="form-label"><b>Поиск по наименованию</b></label>
+    <input name="search" class="form-control" id="search" th:value="*{value_search}">
+
+    <br>
+    <p><b>Цена, ₽</b></p>
+
+    <div class="container">
+      <div class="row">
+        <div class="col col-4">
+          <label for="ot" class="form-label">От</label>
+          <input type="text" class="form-control" name="ot" id="ot" th:value="*{value_price_ot}"
+                 placeholder="">
+        </div>
+        <div class="col col-4">
+          <label for="do" class="form-label">До</label>
+          <input type="text" class="form-control"  name="do" id="do" th:value="*{value_price_do}">
+        </div>
+
+        <div class="col col-4"></div>
+        <div class="col col-4"></div>
+      </div>
+    </div>
+
+
+      <div class="sortProducts">
+      <div class="form-check form-check-inline">
+        <label for="ascending_price" class="form-check-label">Отсортировать по возрастанию цены</label>
+        <input type="radio" class="form-check-input" id="ascending_price" name="price"
+               value="sorted_by_ascending_price">
+      </div>
+
+      <div class="form-check form-check-inline">
+        <label for="descending_price" class="form-check-label">Отсортировать по убыванию цены</label>
+        <input type="radio" class="form-check-input" id="descending_price" name="price"
+               value="sorted_by_descending_price">
+      </div>
+    </div>
+
+      <br>
+      <div class="categFilter">
+        <p><b>Категория товаров:</b> </p>
+
+        <div class="form-check form-check-inline">
+          <label for="food" class="form-check-label">Корм</label>
+          <input class="form-check-input" type="radio" id="food" name="category" value="food">
+        </div>
+        <div class="form-check form-check-inline">
+          <label for="toys" class="form-check-label">Игрушки</label>
+          <input class="form-check-input" type="radio" id="toys" name="category" value="toys">
+        </div>
+        <div class="form-check form-check-inline">
+          <label for="cosmetics" class="form-check-label">Косметика и гигиена</label>
+          <input class="form-check-input" type="radio" id="cosmetics" name="category" value="cosmetics">
+        </div>
+      </div>
+
+      <br>
+      <button type="submit" class="btn btn-primary">Найти</button>
+    </div>
+  </fieldset>
+
+</form>
+</body>
+</html>

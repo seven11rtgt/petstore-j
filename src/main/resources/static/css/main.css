@@ -19,3 +19,19 @@ h3{
     padding: 10px;
     box-sizing: border-box;
 }
+
+.row.product{
+    justify-content: flex-start;
+}
+.col.product{
+    max-width: 300px;
+}
+
+.searchForm{
+    width: 50%;
+}
+
+.searchForm .container{
+    margin: 0;
+    padding-left: 0;
+}

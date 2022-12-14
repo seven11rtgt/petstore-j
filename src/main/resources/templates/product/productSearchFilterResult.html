@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Список товаров</title>
+</head>
+<body>
+
+    <div class="row product" th:fragment="fullProductList" xmlns:th="http://www.thymeleaf.org">
+        <div th:each="product : ${products}"
+             class="col-sm-4 col product">
+            <div class="card mb-3" style="width: 18rem;">
+                <img th:src="'/img/' + ${product.getImageList()[0].getFileName()}" class="card-img-top" >
+                <div class="card-body">
+                    <a th:href="@{/product/info/{id}(id=${product.getId()})}">
+                        <h5 class="card-title" th:text="${product.getTitle()}"></h5>
+                    </a>
+                    <p th:text="'Цена: ' + ${product.getPrice()}" class="card-text"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row product" th:fragment="productList" xmlns:th="http://www.thymeleaf.org">
+        <div th:each="product : ${products}"
+             class="col-sm-4 col product">
+            <div class="card mb-3" style="width: 18rem;">
+                <img th:src="'/img/' + ${product.getImageList()[0].getFileName()}" class="card-img-top" >
+                <div class="card-body">
+                    <a th:href="@{/product/info/{id}(id=${product.getId()})}">
+                        <h5 class="card-title" th:text="${product.getTitle()}"></h5>
+                    </a>
+                    <p th:text="'Цена: ' + ${product.getPrice()}" class="card-text"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

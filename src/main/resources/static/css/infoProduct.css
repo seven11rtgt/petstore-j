@@ -7,14 +7,14 @@ table{
     margin-top: 30px;
 }
 .carouselLayout{
-    width: 100%;
+    width: 70%;
     display: flex;
     justify-content: center;
 }
 
 .container{
-    margin-left: unset;
-    padding-left: unset;
+    margin-left: 0;
+    padding-left: 0;
 }
 .carouselInner{
     width: 50vw;

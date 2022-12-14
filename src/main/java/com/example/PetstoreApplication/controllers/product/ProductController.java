@@ -1,5 +1,6 @@
 package com.example.PetstoreApplication.controllers.product;
 
+import com.example.PetstoreApplication.models.Product;
 import com.example.PetstoreApplication.repositories.ProductRepository;
 import com.example.PetstoreApplication.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/product")
@@ -24,7 +27,7 @@ public class ProductController {
   public String getAllProducts(Model model)
   {
     model.addAttribute("products", productService.getAllProduct());
-    return "/product/productList";
+    return "productSearchFilterResult";
   }
 
   @GetMapping("/info/{id}")
@@ -44,8 +47,11 @@ public class ProductController {
     @RequestParam("do") String Do,
     @RequestParam(value = "price", required = false, defaultValue = "") String price,
     @RequestParam(value = "category", required = false, defaultValue = "") String category,
-    Model model)
+    Model model,
+    @RequestHeader(value = HttpHeaders.REFERER, required = false) final String referrer)
   {
+    List<Product> productsList = productService.getAllProduct();
+
     if(!ot.isEmpty() & !Do.isEmpty())
     {
       if(!price.isEmpty())
@@ -56,14 +62,15 @@ public class ProductController {
           {
             if(category.equals("food"))
             {
-              model.addAttribute("found_product",
-                      productRepository.findByTitleAndCategoryOrderByPriceAsc(search.toLowerCase(), Float.parseFloat(ot), Float.parseFloat(Do), 1));
+              productsList =
+                      productRepository.findByTitleAndCategoryOrderByPriceAsc(search.toLowerCase(), Float.parseFloat(ot), Float.parseFloat(Do), 1);
             }
             else if(category.equals("toys")){
-              model.addAttribute("found_product", productRepository.findByTitleAndCategoryOrderByPriceAsc(search.toLowerCase(), Float.parseFloat(ot), Float.parseFloat(Do), 2));
+              productsList =
+                      productRepository.findByTitleAndCategoryOrderByPriceAsc(search.toLowerCase(), Float.parseFloat(ot), Float.parseFloat(Do), 2);
             }
             else if(category.equals("cosmetics")){
-              model.addAttribute("found_product", productRepository.findByTitleAndCategoryOrderByPriceAsc(search.toLowerCase(), Float.parseFloat(ot), Float.parseFloat(Do), 3));
+              productsList = productRepository.findByTitleAndCategoryOrderByPriceAsc(search.toLowerCase(), Float.parseFloat(ot), Float.parseFloat(Do), 3);
             }
           }
         }
@@ -72,31 +79,41 @@ public class ProductController {
           if(!category.isEmpty())
           {
             if(category.equals("food")){
-              model.addAttribute("found_product", productRepository.findByTitleAndCategoryOrderByPriceDesc(search.toLowerCase(), Float.parseFloat(ot), Float.parseFloat(Do), 1));
+              productsList =
+                    productRepository.findByTitleAndCategoryOrderByPriceDesc(search.toLowerCase(), Float.parseFloat(ot), Float.parseFloat(Do), 1);
             }
             else if(category.equals("toys")){
-              model.addAttribute("found_product", productRepository.findByTitleAndCategoryOrderByPriceDesc(search.toLowerCase(), Float.parseFloat(ot), Float.parseFloat(Do), 2));
+              productsList =
+                    productRepository.findByTitleAndCategoryOrderByPriceDesc(search.toLowerCase(), Float.parseFloat(ot), Float.parseFloat(Do), 2);
             }
             else if(category.equals("cosmetics")){
-              model.addAttribute("found_product", productRepository.findByTitleAndCategoryOrderByPriceDesc(search.toLowerCase(), Float.parseFloat(ot), Float.parseFloat(Do), 3));
+              productsList =
+                      productRepository.findByTitleAndCategoryOrderByPriceDesc(search.toLowerCase(), Float.parseFloat(ot), Float.parseFloat(Do), 3);
             }
           }
         }
       }
       else {
-        model.addAttribute("found_product", productRepository.findByTitleAndPriceGreaterThanEqualAndPriceLessThanEqual(search, Float.parseFloat(ot), Float.parseFloat(Do)));
+        productsList=
+                productRepository.findByTitleAndPriceGreaterThanEqualAndPriceLessThanEqual(search, Float.parseFloat(ot), Float.parseFloat(Do));
       }
     }
     else {
-      model.addAttribute("found_product", productRepository.findByTitleContainingIgnoreCase(search));
+      productsList = productRepository.findByTitleContainingIgnoreCase(search);
+    }
+
+    if(ot.isEmpty() & Do.isEmpty() & search.isEmpty())
+    {
+      productsList = productService.getAllProduct();
     }
 
     model.addAttribute("value_search", search);
     model.addAttribute("value_price_ot", ot);
     model.addAttribute("value_price_do", Do);
-    model.addAttribute("products", productService.getAllProduct());
+    model.addAttribute("products", productsList);
+    model.addAttribute("previousUrl", referrer);
 
-    return "product/productList";
+    return "product/searchResultProductFinal";
   }
 
 
